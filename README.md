@@ -153,9 +153,6 @@ The function should use the following template.
 
     rankall <- function(outcome, num = "best") {}
 
-**NOTE**: For the purpose of this part of the assignment (and for efficiency), your function should NOT call
-the rankhospital function from the previous section.
-
 The function should check the validity of its arguments.  If an invalid outcome value is passed to rankall,
 the function should throw an error via the stop function with the exact message “invalid outcome”.  The num
 variable can take values “best”, “worst”, or an integer indicating the ranking (smaller numbers are better).
