@@ -1,0 +1,74 @@
+rankhospital <- function(state, outcome, rank = "best"){
+
+  ## Read in hospital data
+  
+  RankHospData <- read.csv("outcome-of-care-measures.csv", 
+                            colClasses = "character")
+                            
+  ## Bind columns of desired columns into a data frame
+  
+  SubRankData <- data.frame(cbind(RankHospData[, 2],
+                                       RankHospData[, 7],
+                                       RankHospData[, 11],
+                                       RankHospData[, 17],
+                                       RankHospData[, 23]),
+                                 stringsAsfactors = FALSE)
+                                 
+  ## Rename columns to match input variables
+  
+  colnames(SubRankData) <- c("hospital", 
+                                  "state", 
+                                  "heart attack", 
+                                  "heart failure", 
+                                  "pneumonia")
+                          
+  ## Return stop function for invalid state entry
+  
+  if(!state %in% SubRankData[, "state"]){
+      stop('invalid state')
+      
+  ## Return stop function for invalid outcome entry
+  
+  } else if(!outcome %in% c("heart attack", "heart failure", "pneumonia")){
+      stop('invalid outcome')
+      
+  ## If rank entry is a number, subset & order data 
+  ## set to store desired ranked column to 'output'
+  
+  } else if(is.numeric(rank)){
+    SubRankData[, c("heart attack", "heart failure", "pneumonia")] <- 
+      as.numeric(as.character(unlist(
+        SubRankData[, c("heart attack", "heart failure", "pneumonia")])))
+    SubRankNA <- SubRankData[complete.cases(SubRankData[, 3:5]),]
+    SubState <- SubRankNA[which(SubRankNA[, "state"] == state), ]
+    OutcomeOrd <- SubState[order(SubState[, outcome]),]
+    RowPull <- OutcomeOrd[rank, ]
+    output <- RowPull[, "hospital"]
+ 
+  ## If rank entry is "best", leverage best function
+  ## in global environment
+  
+  } else if(!is.numeric(rank)){
+      if(rank == "best"){
+        output <- best(state, outcome)
+        
+  ## If rank entry is "worst", subest & order data
+  ## set to store lowest ranked column to 'output'
+  
+      } else if(rank == "worst"){
+        SubRankData[, c("heart attack", "heart failure", "pneumonia")] <- 
+        as.numeric(as.character(unlist(
+          SubRankData[, c("heart attack", "heart failure", "pneumonia")])))
+        SubRankNA <- SubRankData[complete.cases(SubRankData[, 3:5]),]
+        SubState <- SubRankNA[which(SubRankNA[, "state"] == state), ]
+        OutcomeOrd <- SubState[order(SubState[, outcome]),]
+        DataTail <- tail(OutcomeOrd, 1)
+        output <- DataTail[, "hospital"]
+        
+  ## If rank is anything but the prior three inputs, run stop function
+      } else {
+          stop('invalid rank')
+    }
+  }
+  return(output)
+  }
