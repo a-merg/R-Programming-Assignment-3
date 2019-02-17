@@ -1,7 +1,6 @@
 ## best function
 
-`
-        best <- function(state, outcome){
+best <- function(state, outcome){
             HospitalData <- read.csv("outcome-of-care-measures.csv", 
                                colClasses = "character")
             NameColumn <- HospitalData[, "Hospital.Name"]
