@@ -53,6 +53,7 @@ rankall <- function(outcome, num = "best"){
 
 ## If num is character "worst", use same loop function as "best" except
 ## arrange outcome column in descending order.
+
     } else if (num == "worst") {
       by_state <- with(fd, split(fd, state))
       ordered  <- list()
@@ -67,6 +68,7 @@ rankall <- function(outcome, num = "best"){
       rownames(output) <- output[, 2]
       
 ## Run stop function for any invalid num entry
+
     } else {
       stop('invalid num')
     }
