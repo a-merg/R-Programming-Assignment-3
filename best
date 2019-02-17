@@ -25,4 +25,4 @@
       StateSubDataTail <- tail(StateSubData, 1)
       StateSubDataTail[, "NameColumn"]
     } 
-    `
+ `
