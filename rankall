@@ -1,8 +1,11 @@
 rankall <- function(outcome, num = "best"){
 
-  ## Read outcome data
+  ## Read hospital data
   
   data <- read.csv("outcome-of-care-measures.csv", colClasses = "character")
+  
+  ## Arrange hospital data into data frame w/ desired column names and classes
+  
   fd   <- as.data.frame(cbind(data[, 2],  # hospital
                               data[, 7],  # state
                               data[, 11],  # heart attack
