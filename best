@@ -1,4 +1,4 @@
-## best function
+**best function**
 
 best <- function(state, outcome){
 
