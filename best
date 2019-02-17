@@ -1,26 +1,47 @@
 ## best function
 
 best <- function(state, outcome){
-            HospitalData <- read.csv("outcome-of-care-measures.csv", 
+
+  ## Read in hospital data
+  
+    HospitalData <- read.csv("outcome-of-care-measures.csv", 
                                colClasses = "character")
-            NameColumn <- HospitalData[, "Hospital.Name"]
-            StateColumn <- HospitalData[, "State"]
-            AttackColumn <- HospitalData[, "Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack"]
-            FailureColumn <- HospitalData[, 17]
-            PneumoniaColumn <- HospitalData[, 23]
-            SubHospitalData <- data.frame(NameColumn, StateColumn, 
+                               
+  ## Create variables from desired columns
+  
+    NameColumn <- HospitalData[, "Hospital.Name"]
+    StateColumn <- HospitalData[, "State"]
+    AttackColumn <- HospitalData[, "Hospital.30.Day.Death..Mortality..Rates.from.Heart.Attack"]
+    FailureColumn <- HospitalData[, 17]
+    PneumoniaColumn <- HospitalData[, 23]
+    
+  ## Create new data frame with desired columns
+  
+    SubHospitalData <- data.frame(NameColumn, StateColumn, 
                                 AttackColumn, FailureColumn, PneumoniaColumn, 
                                 stringsAsFactors = FALSE)
-                                colnames(SubHospitalData)[3] <- "heart attack"
-                                colnames(SubHospitalData)[4] <- "heart failure"
-                                colnames(SubHospitalData)[5] <- "pneumonia" 
-            SubHospitalData[, c("heart attack", "heart failure", "pneumonia")] <- 
-            as.numeric(as.character(unlist(SubHospitalData[, c("heart attack", "heart failure", "pneumonia")])))
-            SubHospitalData <- subset(SubHospitalData, 
-                            SubHospitalData[, outcome] != "Not Available")
-            StateSubData <- subset(SubHospitalData, SubHospitalData$StateColumn == state)
-            StateSubData <- StateSubData[order(StateSubData[, outcome], decreasing = TRUE),]
-            StateSubDataTail <- tail(StateSubData, 1)
-            StateSubDataTail[, "NameColumn"]
+  ## Rename columns for use in function
+    colnames(SubHospitalData)[3] <- "heart attack"
+    colnames(SubHospitalData)[4] <- "heart failure"
+    colnames(SubHospitalData)[5] <- "pneumonia" 
+ 
+  ## Set variables to numeric
+    SubHospitalData[, c("heart attack", "heart failure", "pneumonia")] <- 
+    as.numeric(as.character(unlist(SubHospitalData[, c("heart attack", "heart failure", "pneumonia")])))
+
+  ## Subset where outcome values aren't N/A
+    SubHospitalData <- subset(SubHospitalData, 
+                              SubHospitalData[, outcome] != "Not Available")
+                              
+  ## Subset for state being called in function
+    StateSubData <- subset(SubHospitalData, SubHospitalData$StateColumn == state)
+
+  ## Order new data set by outcome
+    StateSubData <- StateSubData[order(StateSubData[, outcome], decreasing = TRUE),]
+ 
+  ## Extract row for which the outcome value is lowest
+    StateSubDataTail <- tail(StateSubData, 1)
+    
+  ## Return the hospital name
+    StateSubDataTail[, "NameColumn"]
     } 
- `
